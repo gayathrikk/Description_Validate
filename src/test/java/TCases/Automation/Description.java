@@ -124,15 +124,35 @@ public class Description {
 	        
 	        try {
 	            WebDriverWait wait = new WebDriverWait(driver, 30);
+
+	            // Click the element to trigger the popup
 	            WebElement h = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//i[@role='presentation'])[17]")));
 	            h.click();
-	            String actualText = h.getText().trim();
-	            Thread.sleep(3000);
 	            System.out.println("The Ventricle region is clicked");
+
+	            // Wait for the popup to appear
+	            WebElement popupTextElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class, 'desc-card')]")));
+
+	            // Get the text from the popup
+	            String actualText = popupTextElement.getText().trim();
+	            
+	            // Expected text for validation
+	            String expectedText = "The set of ventricles and their parts for the entire central nervous system.";
+
+	            // Print the extracted text
 	            System.out.println("Actual Text: [" + actualText + "]");
+
+	            // Validate the text
+	            if (actualText.equals(expectedText)) {
+	                System.out.println("Validation Passed: The expected text matches the actual text.");
+	            } else {
+	                System.err.println("Validation Failed: Expected [" + expectedText + "] but found [" + actualText + "]");
+	            }
 	        } catch (Exception e) {
-	            System.err.println("The Ventricle region is not clicked: " + e.getMessage());
-	        }}
+	            System.err.println("Error: " + e.getMessage());
+	        }
+
+}
 	        @AfterTest
 		    public void tearDown() {
 		        if (driver != null) {
